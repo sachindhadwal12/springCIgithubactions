@@ -3,7 +3,6 @@ package com.stackroute.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-
 @Entity
 public class Blog {
   @Id private int blogId;
