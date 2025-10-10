@@ -21,6 +21,9 @@ jobs:
       - name: Compile
         run: mvn --batch-mode compile
 
+      - name: Spotless Check
+        run: mvn --batch-mode spotless:check
+
       - name: Build (package)
         run: mvn --batch-mode package
 
