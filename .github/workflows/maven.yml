@@ -9,6 +9,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0 # Or any other desired MySQL version
+        env:
+          MYSQL_ROOT_PASSWORD: password # Use GitHub Secrets for sensitive data
+          MYSQL_DATABASE: blogDB
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v5
@@ -29,3 +42,8 @@ jobs:
 
       - name: Test
         run: mvn --batch-mode test
+        env:
+          DB_HOST: 127.0.0.1 # Connect to the service's internal IP or localhost as seen from the job
+          DB_USER: sachin
+          DB_PASSWORD: password
+          DB_NAME: blogDB
