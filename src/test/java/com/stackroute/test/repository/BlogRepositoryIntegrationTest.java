@@ -36,7 +36,9 @@ class BlogRepositoryIntegrationTest {
   @Test
   public void givenBlogToSaveThenShouldReturnSavedBlog() {
     blogRepository.save(blog);
-    Blog fetchedBlog = blogRepository.findById(blog.getBlogId()).get();
+    Optional<Blog> fetchedBlogOpt = blogRepository.findById(blog.getBlogId());
+    assertTrue(fetchedBlogOpt.isPresent());
+    Blog fetchedBlog = fetchedBlogOpt.get();
     assertEquals(1, fetchedBlog.getBlogId());
   }
 
@@ -47,7 +49,7 @@ class BlogRepositoryIntegrationTest {
     blogRepository.save(blog);
     blogRepository.save(blog1);
 
-    List<Blog> blogList = (List<Blog>) blogRepository.findAll();
+    List<Blog> blogList = blogRepository.findAll();
     assertEquals("Demo3", blogList.get(1).getBlogTitle());
   }
 
@@ -56,6 +58,7 @@ class BlogRepositoryIntegrationTest {
     Blog blog = new Blog(9, "Demo9", "Imneet", "SampleBlog");
     Blog blog1 = blogRepository.save(blog);
     Optional<Blog> optional = blogRepository.findById(blog1.getBlogId());
+    assertTrue(optional.isPresent());
     assertEquals(blog1.getBlogId(), optional.get().getBlogId());
     assertEquals(blog1.getBlogTitle(), optional.get().getBlogTitle());
     assertEquals(blog1.getAuthorName(), optional.get().getAuthorName());
@@ -67,7 +70,8 @@ class BlogRepositoryIntegrationTest {
     Blog blog = new Blog(4, "Demo4", "Imneet", "Sample4");
     blogRepository.save(blog);
     blogRepository.deleteById(blog.getBlogId());
-    Optional optional = blogRepository.findById(blog.getBlogId());
+    Optional<Blog> optional = blogRepository.findById(blog.getBlogId());
+    assertFalse(optional.isPresent());
     assertEquals(Optional.empty(), optional);
   }
 }
